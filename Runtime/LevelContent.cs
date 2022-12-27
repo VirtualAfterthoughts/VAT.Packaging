@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
+using VAT.Shared.Extensions;
+
 using Object = UnityEngine.Object;
 
 namespace VAT.Packaging {
@@ -21,6 +23,12 @@ namespace VAT.Packaging {
                 _mainAsset.EditorAsset = AssetDatabase.LoadAssetAtPath<SceneAsset>(path);
 
             base._mainAsset = _mainAsset;
+
+            if (_mainAsset != null && _mainAsset.EditorAsset && Package != null) {
+                var groupName = $"{Address.CleanAddress(Package.Title.ToLower())}_levels";
+
+                _mainAsset.EditorAsset.MarkAsAddressable(groupName);
+            }
         }
 
         public override void SetAsset(Object asset)
