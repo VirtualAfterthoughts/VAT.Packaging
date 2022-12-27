@@ -14,7 +14,9 @@ using UnityEngine.AddressableAssets;
 using VAT.Serialization.JSON;
 
 using Newtonsoft.Json.Linq;
+
 using System.Linq;
+using System;
 
 namespace VAT.Packaging {
     public class AssetPackager {
@@ -26,6 +28,8 @@ namespace VAT.Packaging {
 
         private bool _isReady = false;
         private bool _isInitializing = false;
+
+        private static Action _onPackagerReady = null;
 
         public static bool IsReady => Instance != null && Instance._isReady;
 
@@ -39,6 +43,15 @@ namespace VAT.Packaging {
             }
         }
         
+        public static void HookOnReady(Action action) {
+            if (IsReady) {
+                action.Invoke();
+            }
+            else {
+                _onPackagerReady += action;
+            }
+        }
+
         public void Init() {
             if (_isInitializing)
                 return;
@@ -75,6 +88,11 @@ namespace VAT.Packaging {
                 }
 
                 _isReady = true;
+
+                // Invoke ready
+                _onPackagerReady?.Invoke();
+                _onPackagerReady = null;
+
                 return;
             }
 #endif
@@ -100,6 +118,10 @@ namespace VAT.Packaging {
             // Not implemented
 
             _isReady = true;
+
+            // Invoke ready
+            _onPackagerReady?.Invoke();
+            _onPackagerReady = null;
         }
 
 #if UNITY_EDITOR
