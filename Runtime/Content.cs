@@ -43,16 +43,16 @@ namespace VAT.Packaging {
                 Address = Address.BuildAddress(_package.Author, _package.Title, _title);
 
             // Save asset info
-            ValidateAsset();
+            ValidateAsset(false);
         }
-        public virtual void ValidateAsset() { }
+        public virtual void ValidateAsset(bool isBuilding = false) { }
 
         public virtual void SetAsset(Object asset) { }
 #endif
 
         public void Pack(JSONPacker packer, JObject json) {
 #if UNITY_EDITOR
-            ValidateAsset();
+            ValidateAsset(true);
 #endif
 
             json.Add("address", Address.ID);

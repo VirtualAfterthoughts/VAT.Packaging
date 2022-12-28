@@ -17,14 +17,14 @@ namespace VAT.Packaging {
         public CrystScene MainScene => _mainAsset;
 
 #if UNITY_EDITOR
-        public override void ValidateAsset() {
+        public override void ValidateAsset(bool isBuilding = false) {
             string path = AssetDatabase.GUIDToAssetPath(_mainAsset.AssetGUID);
             if (!string.IsNullOrEmpty(path))
                 _mainAsset.EditorAsset = AssetDatabase.LoadAssetAtPath<SceneAsset>(path);
 
             base._mainAsset = _mainAsset;
 
-            if (_mainAsset != null && _mainAsset.EditorAsset && Package != null) {
+            if (isBuilding && _mainAsset != null && _mainAsset.EditorAsset && Package != null) {
                 var groupName = $"{Address.CleanAddress(Package.Title.ToLower())}_levels";
 
                 _mainAsset.EditorAsset.MarkAsAddressable(groupName);

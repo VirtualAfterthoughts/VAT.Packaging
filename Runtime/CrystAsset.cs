@@ -131,6 +131,40 @@ namespace VAT.Packaging {
 
             return result;
         }
+
+        public virtual bool ReleaseAsset() {
+            if (!_operationHandle.IsValid())
+                return false;
+
+            Addressables.Release(_operationHandle);
+            _operationHandle = default;
+            return true;
+        }
+
+        public void UnloadScene(Action onSceneUnloaded) {
+            if (!_sceneHandle.IsValid()) {
+                onSceneUnloaded?.Invoke();
+            }
+            else {
+                Internal_UnloadScene(onSceneUnloaded).Forget();
+            }
+        }
+
+        private async UniTaskVoid Internal_UnloadScene(Action onSceneUnloaded) {
+            await UnloadSceneAsync();
+            onSceneUnloaded?.Invoke();
+        }
+
+        public async UniTask UnloadSceneAsync() {
+            if (!_sceneHandle.IsValid())
+                return;
+
+            // Store handle reference, but make the value invalid
+            var handle = _sceneHandle;
+            _sceneHandle = default;
+
+            await Addressables.UnloadSceneAsync(handle, true);
+        }
     }
 
     [Serializable]

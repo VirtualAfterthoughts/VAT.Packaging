@@ -14,7 +14,7 @@ namespace VAT.Packaging
         protected new CrystGameObject _mainAsset;
 
 #if UNITY_EDITOR
-        public override void ValidateAsset() {
+        public override void ValidateAsset(bool isBuilding = false) {
             _mainAsset.ValidateGUID();
             base._mainAsset = _mainAsset;
         }

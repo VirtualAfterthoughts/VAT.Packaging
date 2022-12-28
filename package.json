@@ -1,6 +1,6 @@
 {
     "name": "com.virtualafterthoughts.packaging",
-	"version": "1.0.0",
+	"version": "1.0.1",
     "displayName": "VAT Packaging",
     "description": "An abstraction of addressables for loading and unloading assets as well as mods.",
 	"unity": "2021.3",
