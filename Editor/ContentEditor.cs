@@ -45,18 +45,18 @@ namespace VAT.Packaging.Editor
     [CustomEditor(typeof(GameObjectContent), true)]
     [CanEditMultipleObjects]
     public class GameObjectContentEditor : ContentEditor {
-        private SerializedProperty _mainAsset;
+        private SerializedProperty _mainGameObject;
 
         protected override void OnEnable() {
             base.OnEnable();
 
-            _mainAsset = serializedObject.FindProperty("_mainAsset");
+            _mainGameObject = serializedObject.FindProperty("_mainGameObject");
         }
 
         public override void OnInspectorGUI() {
             base.OnInspectorGUI();
 
-            EditorGUILayout.PropertyField(_mainAsset);
+            EditorGUILayout.PropertyField(_mainGameObject);
 
             serializedObject.ApplyModifiedProperties();
         }
