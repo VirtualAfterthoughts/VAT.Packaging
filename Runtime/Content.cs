@@ -91,15 +91,14 @@ namespace VAT.Packaging {
     }
 
     public class ContentT<T> : Content where T : Object {
-        private CrystAssetT<T> _cachedMainAsset = null;
+        private new CrystAssetT<T> _mainAsset = null;
         public new CrystAssetT<T> MainAsset {
             get {
-                if (_cachedMainAsset == null || _cachedMainAsset.AssetGUID != base._mainAsset.AssetGUID) {
-                    _cachedMainAsset = new CrystAssetT<T>(base._mainAsset.AssetGUID);
-                    _cachedMainAsset.ValidateGUID(base._mainAsset.EditorAsset);
+                if (_mainAsset == null || _mainAsset.AssetGUID != base._mainAsset.AssetGUID) {
+                    _mainAsset = new CrystAssetT<T>(base._mainAsset.EditorAsset as T);
                 }
 
-                return _cachedMainAsset;
+                return _mainAsset;
             }
         }
     }
