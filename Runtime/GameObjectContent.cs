@@ -11,30 +11,27 @@ namespace VAT.Packaging
 {
     public class GameObjectContent : ContentT<GameObject> {
         [SerializeField]
-        protected new CrystGameObject _mainAsset;
+        private CrystGameObject _mainGameObject;
 
         public override CrystAsset MainAsset {
             get {
-                return _mainAsset;
+                return _mainGameObject;
             }
             set {
                 if (value != null && value.GetType() == typeof(CrystAsset)) {
-                    _mainAsset = new CrystGameObject(value.AssetGUID);
-
-#if UNITY_EDITOR
-                    _mainAsset.ValidateGUID(value.EditorAsset);
-#endif
+                    _mainGameObject = new CrystGameObject(value.AssetGUID);
                 }
                 else {
-                    _mainAsset = value as CrystGameObject;
+                    _mainGameObject = value as CrystGameObject;
                 }
             }
         }
 
+        public CrystGameObject MainGameObject { get { return _mainGameObject; } set { _mainGameObject = value; } }
+
 #if UNITY_EDITOR
         public override void ValidateAsset(bool isBuilding = false) {
-            _mainAsset.ValidateGUID();
-            base._mainAsset = _mainAsset;
+            _mainGameObject.ValidateGUID();
         }
 
         public override void SetAsset(Object asset) {

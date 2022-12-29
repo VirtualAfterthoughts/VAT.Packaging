@@ -12,10 +12,10 @@ namespace VAT.Packaging
         public override void ValidateAsset(bool isBuilding = false) {
             base.ValidateAsset(isBuilding);
 
-            if (isBuilding && _mainAsset != null && _mainAsset.PackedAsset && Package != null) {
+            if (isBuilding && MainGameObject != null && MainGameObject.PackedAsset && Package != null) {
                 var groupName = $"{Address.CleanAddress(Package.Title.ToLower())}_spawnables";
 
-                _mainAsset.PackedAsset.MarkAsAddressable(groupName);
+                MainGameObject.PackedAsset.MarkAsAddressable(groupName);
             }
         }
 #endif

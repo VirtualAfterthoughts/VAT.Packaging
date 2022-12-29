@@ -10,6 +10,8 @@ namespace VAT.Packaging
 {
     [Serializable]
     public class CrystScene : CrystAsset {
+        public CrystScene(string guid) : base(guid) { }
+
 #if UNITY_EDITOR
         public CrystScene(SceneAsset asset) {
             ValidateGUID(asset);

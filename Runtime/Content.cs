@@ -20,7 +20,7 @@ namespace VAT.Packaging {
         protected Package _package;
         public Package Package { get { return _package; } set { _package = value; } }
 
-        protected CrystAsset _mainAsset;
+        private CrystAsset _mainAsset;
         public virtual CrystAsset MainAsset { 
             get {
                 return _mainAsset;

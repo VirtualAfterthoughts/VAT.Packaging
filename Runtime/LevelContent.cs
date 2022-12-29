@@ -12,22 +12,34 @@ using Object = UnityEngine.Object;
 namespace VAT.Packaging {
     public class LevelContent : Content {
         [SerializeField]
-        protected new CrystScene _mainAsset;
+        private CrystScene _mainScene;
 
-        public CrystScene MainScene => _mainAsset;
+        public override CrystAsset MainAsset {
+            get {
+                return _mainScene;
+            }
+            set {
+                if (value != null && value.GetType() == typeof(CrystAsset)) {
+                    _mainScene = new CrystScene(value.AssetGUID);
+                }
+                else {
+                    _mainScene = value as CrystScene;
+                }
+            }
+        }
+
+        public CrystScene MainScene { get { return _mainScene; } set { _mainScene = value; } }
 
 #if UNITY_EDITOR
         public override void ValidateAsset(bool isBuilding = false) {
-            string path = AssetDatabase.GUIDToAssetPath(_mainAsset.AssetGUID);
+            string path = AssetDatabase.GUIDToAssetPath(MainScene.AssetGUID);
             if (!string.IsNullOrEmpty(path))
-                _mainAsset.EditorAsset = AssetDatabase.LoadAssetAtPath<SceneAsset>(path);
+                MainScene.EditorAsset = AssetDatabase.LoadAssetAtPath<SceneAsset>(path);
 
-            base._mainAsset = _mainAsset;
-
-            if (isBuilding && _mainAsset != null && _mainAsset.EditorAsset && Package != null) {
+            if (isBuilding && MainScene != null && MainScene.EditorAsset && Package != null) {
                 var groupName = $"{Address.CleanAddress(Package.Title.ToLower())}_levels";
 
-                _mainAsset.EditorAsset.MarkAsAddressable(groupName);
+                MainScene.EditorAsset.MarkAsAddressable(groupName);
             }
         }
 
@@ -36,14 +48,14 @@ namespace VAT.Packaging {
             if (asset is not SceneAsset)
                 throw new ArgumentException("Asset for content was not a Scene.");
 
-            _mainAsset = new CrystScene(asset as SceneAsset);
+            MainScene = new CrystScene(asset as SceneAsset);
         }
 
         public void ForceAsset(SceneAsset asset) {
-            var prevAsset = _mainAsset.EditorAsset;
+            var prevAsset = MainScene.EditorAsset;
 
-            _mainAsset.EditorAsset = asset;
-            _mainAsset.ValidateGUID(asset);
+            MainScene.EditorAsset = asset;
+            MainScene.ValidateGUID(asset);
 
             if (prevAsset != asset)
                 EditorUtility.SetDirty(this);
