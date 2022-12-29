@@ -13,6 +13,24 @@ namespace VAT.Packaging
         [SerializeField]
         protected new CrystGameObject _mainAsset;
 
+        public override CrystAsset MainAsset {
+            get {
+                return _mainAsset;
+            }
+            set {
+                if (value != null && value.GetType() == typeof(CrystAsset)) {
+                    _mainAsset = new CrystGameObject(value.AssetGUID);
+
+#if UNITY_EDITOR
+                    _mainAsset.ValidateGUID(value.EditorAsset);
+#endif
+                }
+                else {
+                    _mainAsset = value as CrystGameObject;
+                }
+            }
+        }
+
 #if UNITY_EDITOR
         public override void ValidateAsset(bool isBuilding = false) {
             _mainAsset.ValidateGUID();
@@ -23,7 +41,7 @@ namespace VAT.Packaging
             if (asset is not GameObject)
                 throw new ArgumentException("Asset for content was not a GameObject.");
 
-            _mainAsset = new CrystGameObject(asset as GameObject);
+            MainAsset = new CrystGameObject(asset as GameObject);
         }
 #endif
     }

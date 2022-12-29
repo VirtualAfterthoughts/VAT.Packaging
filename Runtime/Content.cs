@@ -21,7 +21,14 @@ namespace VAT.Packaging {
         public Package Package { get { return _package; } set { _package = value; } }
 
         protected CrystAsset _mainAsset;
-        public CrystAsset MainAsset => _mainAsset;
+        public virtual CrystAsset MainAsset { 
+            get {
+                return _mainAsset;
+            }
+            set {
+                _mainAsset = value;
+            }
+        }
 
         public static Content Create(Type type) {
             if (!type.IsSubclassOf(typeof(Content)))
@@ -81,7 +88,7 @@ namespace VAT.Packaging {
             }
 
             if (json.TryGetValue("mainAsset", out var mainAsset)) {
-                _mainAsset = new CrystAsset(mainAsset.ToString());
+                MainAsset = new CrystAsset(mainAsset.ToString());
             }
 
             if (json.TryGetValue("package", out var package)) {
@@ -91,15 +98,5 @@ namespace VAT.Packaging {
     }
 
     public class ContentT<T> : Content where T : Object {
-        private new CrystAssetT<T> _mainAsset = null;
-        public new CrystAssetT<T> MainAsset {
-            get {
-                if (_mainAsset == null || _mainAsset.AssetGUID != base._mainAsset.AssetGUID) {
-                    _mainAsset = new CrystAssetT<T>(base._mainAsset.EditorAsset as T);
-                }
-
-                return _mainAsset;
-            }
-        }
     }
 }
