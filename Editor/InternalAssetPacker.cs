@@ -10,7 +10,7 @@ namespace VAT.Packaging.Editor
         [MenuItem("VAT/Internal/Pack Text Assets")]
         public static void PackTextAssets() {
             // Refresh the asset packager
-            AssetPackager.RefreshEditorPackager();
+            AssetPackager.EditorForceRefresh();
 
             // Set the addressables info
             AddressablesManager.ClearGroups();

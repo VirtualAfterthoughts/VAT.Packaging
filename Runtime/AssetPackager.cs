@@ -19,6 +19,9 @@ using System.Linq;
 using System;
 
 namespace VAT.Packaging {
+#if UNITY_EDITOR
+    [InitializeOnLoad]
+#endif
     public class AssetPackager {
         public const string INTERNAL_PACKAGES_GROUP = "Internal Packages";
         public const string INTERNAL_PACKAGES_LABEL = "InternalPackage";
@@ -129,8 +132,21 @@ namespace VAT.Packaging {
         public const string CRYST_PACKAGES_FOLDER = "Packages";
         public const string CRYST_TEXT_ASSETS_FOLDER = "Text Assets";
 
+        // Static constructor for hooking
+        static AssetPackager() {
+            EditorApplication.playModeStateChanged += Internal_PlayModeStateChanged;
+        }
+
+        // Check if we need to reload the AssetPackager
+        private static void Internal_PlayModeStateChanged(PlayModeStateChange change) {
+            // Since the editor has entered edit mode, we reload the packager
+            if (change == PlayModeStateChange.EnteredEditMode) {
+                Internal_InitializeEditor();
+            }
+        }
+
         [InitializeOnLoadMethod]
-        public static void InitializeEditor() {
+        private static void Internal_InitializeEditor() {
             // Create folders
             if (!AssetDatabase.IsValidFolder($"Assets/{CRYST_ASSETS_FOLDER}"))
                 AssetDatabase.CreateFolder("Assets", CRYST_ASSETS_FOLDER);
@@ -140,14 +156,14 @@ namespace VAT.Packaging {
                 _instance = new AssetPackager(true);
         }
 
-        public static void RefreshEditorPackager() {
+        public static void EditorForceRefresh() {
             _instance = null;
             _instance = new AssetPackager(true);
         }
 #endif
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
-        public static void InitializeRuntime() {
+        private static void Internal_InitializeRuntime() {
             _instance = new AssetPackager();
         }
 

@@ -126,7 +126,7 @@ namespace VAT.Packaging.Editor
             content.ForceSerialize();
             _package.ForceSerialize();
 
-            AssetPackager.RefreshEditorPackager();
+            AssetPackager.EditorForceRefresh();
 
             // Show file in editor
             Selection.SetActiveObjectWithContext(content, content);

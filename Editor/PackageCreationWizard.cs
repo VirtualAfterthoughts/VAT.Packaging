@@ -69,7 +69,7 @@ namespace VAT.Packaging.Editor
 
             package.ForceSerialize();
 
-            AssetPackager.RefreshEditorPackager();
+            AssetPackager.EditorForceRefresh();
 
             // Show file in editor
             Selection.SetActiveObjectWithContext(package, package);
