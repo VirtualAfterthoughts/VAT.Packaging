@@ -174,6 +174,8 @@ namespace VAT.Packaging {
         private T _packedAsset = null;
         public T PackedAsset => _packedAsset;
 
+        public new T EditorAsset => base.EditorAsset as T;
+
         public void ValidateGUID() {
             base.ValidateGUID(_packedAsset);
         }

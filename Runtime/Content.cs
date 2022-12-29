@@ -96,6 +96,7 @@ namespace VAT.Packaging {
             get {
                 if (_cachedMainAsset == null || _cachedMainAsset.AssetGUID != base._mainAsset.AssetGUID) {
                     _cachedMainAsset = new CrystAssetT<T>(base._mainAsset.AssetGUID);
+                    _cachedMainAsset.ValidateGUID(base._mainAsset.EditorAsset);
                 }
 
                 return _cachedMainAsset;
