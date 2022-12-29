@@ -92,6 +92,15 @@ namespace VAT.Packaging {
     }
 
     public class ContentT<T> : Content where T : Object {
-        public new CrystAssetT<T> MainAsset => base.MainAsset as CrystAssetT<T>;
+        private new CrystAssetT<T> _mainAsset = null;
+        public new CrystAssetT<T> MainAsset {
+            get {
+                if (_mainAsset == null || _mainAsset.AssetGUID != base._mainAsset.AssetGUID) {
+                    _mainAsset = new CrystAssetT<T>(base._mainAsset.AssetGUID);
+                }
+
+                return _mainAsset;
+            }
+        }
     }
 }
