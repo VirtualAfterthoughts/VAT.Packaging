@@ -19,9 +19,6 @@ using System.Linq;
 using System;
 
 namespace VAT.Packaging {
-#if UNITY_EDITOR
-    [InitializeOnLoad]
-#endif
     public class AssetPackager {
         public const string INTERNAL_PACKAGES_GROUP = "Internal Packages";
         public const string INTERNAL_PACKAGES_LABEL = "InternalPackage";
@@ -108,6 +105,11 @@ namespace VAT.Packaging {
             // Load built in packages
             var handle = await Addressables.LoadAssetsAsync<TextAsset>(INTERNAL_PACKAGES_LABEL, null).Task;
 
+            if (handle == null) {
+                Debug.LogError("Failed loading internal packages! Make sure to select VAT -> Internal -> Pack Text Assets before entering play mode!");
+                return;
+            }
+
             foreach (var asset in handle) {
                 string text = asset.text;
                 JSONUnpacker unpacker = new(JObject.Parse(text));
@@ -131,19 +133,6 @@ namespace VAT.Packaging {
         public const string CRYST_ASSETS_FOLDER = "_CrystAssets";
         public const string CRYST_PACKAGES_FOLDER = "Packages";
         public const string CRYST_TEXT_ASSETS_FOLDER = "Text Assets";
-
-        // Static constructor for hooking
-        static AssetPackager() {
-            EditorApplication.playModeStateChanged += Internal_PlayModeStateChanged;
-        }
-
-        // Check if we need to reload the AssetPackager
-        private static void Internal_PlayModeStateChanged(PlayModeStateChange change) {
-            // Since the editor has entered edit mode, we reload the packager
-            if (change == PlayModeStateChange.EnteredEditMode) {
-                Internal_InitializeEditor();
-            }
-        }
 
         [InitializeOnLoadMethod]
         private static void Internal_InitializeEditor() {
