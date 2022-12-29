@@ -81,6 +81,7 @@ namespace VAT.Packaging {
 
             if (json.TryGetValue("title", out var title)) {
                 _title = title.ToString();
+                name = $"_{_title}";
             }
 
             if (json.TryGetValue("description", out var description)) {
