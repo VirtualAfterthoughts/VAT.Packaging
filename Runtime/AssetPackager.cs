@@ -194,6 +194,18 @@ namespace VAT.Packaging {
             return false;
         }
 
+        public bool TryGetContent<T>(Address address, out T content) where T : Content {
+            if (_loadedContent.ContainsKey(address)) {
+                var loaded = _loadedContent[address];
+                content = loaded as T;
+
+                return content != null;
+            }
+
+            content = default;
+            return false;
+        }
+
         public IReadOnlyCollection<Package> GetPackages() {
             return _loadedPackages.Values;
         }
