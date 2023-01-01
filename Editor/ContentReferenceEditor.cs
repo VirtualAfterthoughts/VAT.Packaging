@@ -53,13 +53,10 @@ namespace VAT.Packaging.Editor
         }
     }
 
-    /// <summary>
-    /// Draws a reference to a generic content asset, which can be toggled between showing the address or the asset itself.
-    /// </summary>
-    [CustomPropertyDrawer(typeof(ContentReferenceT<>), true)]
-    public class ContentReferenceEditorT<T> : PropertyDrawer where T : Object
+    // A generic version of the content reference editor
+    public class ContentReferenceEditorT<T> : PropertyDrawer where T : Content
     {
-        public ContentT<T> selectedContent = null;
+        public T selectedContent = null;
         public bool isDrawingAddress = false;
 
         private bool _hasRan = false;
@@ -78,7 +75,7 @@ namespace VAT.Packaging.Editor
             }
             else
             {
-                selectedContent = EditorGUI.ObjectField(position, label, selectedContent, typeof(ContentT<T>), false) as ContentT<T>;
+                selectedContent = EditorGUI.ObjectField(position, label, selectedContent, typeof(T), false) as T;
                 if (selectedContent)
                     addressProperty.stringValue = selectedContent.Address.ID;
                 else if (!_hasRan && AssetPackager.IsReady)
@@ -104,4 +101,17 @@ namespace VAT.Packaging.Editor
             EditorGUI.EndProperty();
         }
     }
+
+    // Editor for content reference types
+    [CustomPropertyDrawer(typeof(SpawnableContentReference), true)]
+    public class SpawnableContentReferenceEditor : ContentReferenceEditorT<SpawnableContent> { }
+
+    [CustomPropertyDrawer(typeof(LevelContentReference), true)]
+    public class LevelContentReferenceEditor : ContentReferenceEditorT<LevelContent> { }
+
+    [CustomPropertyDrawer(typeof(AudioClipContentReference), true)]
+    public class AudioClipContentReferenceEditor : ContentReferenceEditorT<AudioClipContent> { }
+
+    [CustomPropertyDrawer(typeof(ScriptableObjectContentReference), true)]
+    public class ScriptableObjectContentReferenceEditor : ContentReferenceEditorT<ScriptableObjectContent> { }
 }
