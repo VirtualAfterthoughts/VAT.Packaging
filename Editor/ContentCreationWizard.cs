@@ -95,6 +95,18 @@ namespace VAT.Packaging.Editor
                             isValid = false;
                         }
                         break;
+                    case ContentType.SCRIPTABLE_OBJECT_CONTENT:
+                        if (_mainAsset is not ScriptableObject) {
+                            EditorGUILayout.LabelField("Main Asset is not a Scriptable Object!", errorStyle);
+                            isValid = false;
+                        }
+                        break;
+                    case ContentType.AUDIO_CLIP_CONTENT:
+                        if (_mainAsset is not AudioClip) {
+                            EditorGUILayout.LabelField("Main Asset is not an Audio Clip!");
+                            isValid = false;
+                        }
+                        break;
                 }
             }
 
